@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: Home()
-  ));
+  runApp(MaterialApp(home: Home()));
 }
 
 class Home extends StatefulWidget {
@@ -14,18 +12,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('Sign-in',
-        style: TextStyle(
-          fontSize: 30
-        ),),
+        title: Text(
+          'Sign-in',
+          style: TextStyle(fontSize: 30),
+        ),
       ),
     );
   }
 }
-
