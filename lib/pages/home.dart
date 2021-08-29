@@ -20,7 +20,7 @@ class _GenerateState extends State<Generate> {
   void generateNumbers() {
     var rng = new Random();
     randomNumbers.clear();
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 10000; i++) {
       randomNumbers.add(rng.nextInt(10000));
     }
   }
