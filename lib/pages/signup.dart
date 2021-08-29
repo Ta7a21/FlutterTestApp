@@ -13,7 +13,7 @@ class SignUp extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  void dispose(){
+  void dispose() {
     _fnameController.dispose();
     _lnameController.dispose();
     _usernameController.dispose();
@@ -26,6 +26,7 @@ class SignUp extends StatelessWidget {
     allRows.forEach(print);
   }
   void _insert(var password) async {
+
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnFName: _fnameController.text,
@@ -96,13 +97,13 @@ class SignUp extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      if (_passwordController.text != _confirmPasswordController.text)
-                        print(1);
+                      if (_confirmPasswordController.text !=
+                          _passwordController.text)
+                        return;
                       else {
                         var bytes = utf8.encode(_passwordController.text);
                         var hashedPassword = sha1.convert(bytes);
                         _insert(hashedPassword);
-                        _query();
                         Navigator.pushNamedAndRemoveUntil(
                             context, "/home", (r) => false);
                       }
@@ -114,6 +115,3 @@ class SignUp extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -37,14 +37,8 @@ class DatabaseHelper {
 
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
-    return await db.execute('''
-          CREATE TABLE $table (
-            $columnUsername VARCHAR PRIMARY KEY,
-            $columnFName VARCHAR NOT NULL,
-            $columnLName VARCHAR NOT NULL,
-            $columnPassword TEXT NOT NULL
-          )
-          ''');
+    return await db.execute(
+        'CREATE TABLE $table ($columnUsername VARCHAR(20) PRIMARY KEY,$columnFName VARCHAR(20) NOT NULL,$columnLName VARCHAR(20) NOT NULL,$columnPassword TEXT NOT NULL)');
   }
 
   // Helper methods
