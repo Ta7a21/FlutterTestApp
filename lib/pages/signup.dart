@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:filtration_task/services/database_helper.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+
 
 class SignUp extends StatelessWidget {
   final dbHelper = DatabaseHelper.instance;
@@ -22,13 +25,13 @@ class SignUp extends StatelessWidget {
     print('query all rows:');
     allRows.forEach(print);
   }
-  void _insert() async {
+  void _insert(var password) async {
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnFName: _fnameController.text,
       DatabaseHelper.columnLName: _lnameController.text,
       DatabaseHelper.columnUsername: _usernameController.text,
-      DatabaseHelper.columnPassword: _passwordController.text,
+      DatabaseHelper.columnPassword: password.toString(),
     };
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
@@ -80,21 +83,29 @@ class SignUp extends StatelessWidget {
                 TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(labelText: 'Password'),
+                  obscureText: true,
                 ),
                 TextFormField(
                   controller: _confirmPasswordController,
                   decoration:
                       const InputDecoration(labelText: 'Confirm Password'),
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      _insert();
-                      _query();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, "/home", (r) => false);
+                      if (_passwordController.text != _confirmPasswordController.text)
+                        print(1);
+                      else {
+                        var bytes = utf8.encode(_passwordController.text);
+                        var hashedPassword = sha1.convert(bytes);
+                        _insert(hashedPassword);
+                        _query();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, "/home", (r) => false);
+                      }
                     },
                     child: Text('Submit'))
               ],

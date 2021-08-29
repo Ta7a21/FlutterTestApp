@@ -24,6 +24,7 @@ class SignIn extends StatelessWidget {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Password'),
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 10,
