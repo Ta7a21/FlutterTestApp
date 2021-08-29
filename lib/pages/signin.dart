@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:filtration_task/services/database_helper.dart';
 
 class SignIn extends StatelessWidget {
+  final dbHelper = DatabaseHelper.instance;
+
+  void _query() async {
+    final allRows = await dbHelper.queryAllRows();
+    print('query all rows:');
+    allRows.forEach(print);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
