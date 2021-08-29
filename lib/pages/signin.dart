@@ -4,27 +4,36 @@ import 'package:sqflite/sqflite.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
+class SignIn extends StatefulWidget {
+  @override
+  _SignInState createState() => _SignInState();
+}
 
-class SignIn extends StatelessWidget {
-
+class _SignInState extends State<SignIn> {
   final _usernameController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
   final dbHelper = DatabaseHelper.instance;
+  String incorrectAuth = '';
 
-  Future <int?> _query() async {
+  Future<int?> _query() async {
     Database db = await DatabaseHelper.instance.database;
-    List <String> columns = [DatabaseHelper.columnUsername,DatabaseHelper.columnPassword];
+    List<String> columns = [
+      DatabaseHelper.columnUsername,
+      DatabaseHelper.columnPassword
+    ];
     String row = '${DatabaseHelper.columnUsername} = ?';
-    List <dynamic> reqRow = [_usernameController.text];
+    List<dynamic> reqRow = [_usernameController.text];
 
-    List <Map> result = await db.query(DatabaseHelper.table, columns: columns,where: row, whereArgs: reqRow);
+    List<Map> result = await db.query(DatabaseHelper.table,
+        columns: columns, where: row, whereArgs: reqRow);
     if (result.isNotEmpty) {
       var bytes = utf8.encode(_passwordController.text);
       var hashedPassword = sha1.convert(bytes);
-      if (hashedPassword.toString() == result.first['password']){
+      if (hashedPassword.toString() == result.first['password']) {
         return 1;
-      }
-      else{
+      } else {
         return 0;
       }
     }
@@ -71,21 +80,37 @@ class SignIn extends StatelessWidget {
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },
-                        child: Text('Sign-up'))
+                        child: Text(
+                          'Sign-up',
+                          style: TextStyle(color: Colors.black),
+                        ))
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 ElevatedButton(
-                    onPressed: () async{
-                      int? flag = await _query();
-                      print(flag);
-                      if (flag == 1) {
-                        Navigator.pushReplacementNamed(context, '/home');
-                      }
-                    },
-                    child: Text('Submit'))
+                  onPressed: () async {
+                    incorrectAuth = '';
+                    int? flag = await _query();
+                    if (flag == 1) {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    } else {
+                      setState(() {
+                        incorrectAuth = 'Incorrect Username or Password';
+                      });
+                    }
+                  },
+                  child: Text('Submit'),
+                  style: ElevatedButton.styleFrom(primary: Colors.black),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  incorrectAuth,
+                  style: TextStyle(color: Colors.red[900]),
+                ),
               ],
             )),
       ),

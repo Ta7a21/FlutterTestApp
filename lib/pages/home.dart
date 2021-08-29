@@ -49,6 +49,7 @@ class _GenerateState extends State<Generate> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome'),
+        backgroundColor: Colors.black,
         centerTitle: true,
         actions: [
           Center(
