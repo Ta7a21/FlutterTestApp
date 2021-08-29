@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:filtration_task/services/writeFile.dart';
 
 class Generate extends StatefulWidget {

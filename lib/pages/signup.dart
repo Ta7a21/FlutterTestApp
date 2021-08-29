@@ -10,13 +10,25 @@ class SignUp extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  void dispose(){
+    _fnameController.dispose();
+    _lnameController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+  }
+  void _query() async {
+    final allRows = await dbHelper.queryAllRows();
+    print('query all rows:');
+    allRows.forEach(print);
+  }
   void _insert() async {
     // row to insert
     Map<String, dynamic> row = {
-      DatabaseHelper.columnFName: 'Bob',
-      DatabaseHelper.columnLName: 'Bob',
-      DatabaseHelper.columnUsername: 23,
-      DatabaseHelper.columnPassword: 'Bob',
+      DatabaseHelper.columnFName: _fnameController.text,
+      DatabaseHelper.columnLName: _lnameController.text,
+      DatabaseHelper.columnUsername: _usernameController.text,
+      DatabaseHelper.columnPassword: _passwordController.text,
     };
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
@@ -79,6 +91,8 @@ class SignUp extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
+                      _insert();
+                      _query();
                       Navigator.pushNamedAndRemoveUntil(
                           context, "/home", (r) => false);
                     },
@@ -89,3 +103,6 @@ class SignUp extends StatelessWidget {
     );
   }
 }
+
+
+
