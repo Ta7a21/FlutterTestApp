@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
-  const SignIn({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,6 +10,7 @@ class SignIn extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.black,
       ),
+      resizeToAvoidBottomInset: false,
       body: Form(
         child: Padding(
             padding: EdgeInsets.fromLTRB(100, 140, 100, 0),
@@ -43,7 +42,11 @@ class SignIn extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-                ElevatedButton(onPressed: null, child: Text('Submit'))
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    },
+                    child: Text('Submit'))
               ],
             )),
       ),
