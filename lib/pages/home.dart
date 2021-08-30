@@ -27,18 +27,18 @@ class _GenerateState extends State<Generate> {
         centerTitle: true,
         actions: [
           Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Text(
-                  'Log out',
-                  style: TextStyle(fontSize: 16),
+            child: TextButton.icon(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
                 ),
-              ),
-            ),
+                label: Text(
+                  'Log out',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                )),
           )
         ],
       ),
@@ -96,7 +96,8 @@ class _GenerateState extends State<Generate> {
                           },
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
-                            hintText: 'Search for a number',
+                            hintText: 'Search numbers',
+                            hintStyle: TextStyle(fontSize: 14),
                             contentPadding:
                                 const EdgeInsets.symmetric(horizontal: 32),
                           ),
