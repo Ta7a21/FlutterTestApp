@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:filtration_task/services/database_helper.dart';
 import 'package:filtration_task/user.dart';
+import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
   @override

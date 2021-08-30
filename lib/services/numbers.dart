@@ -1,5 +1,5 @@
-import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'dart:math';
 
 class Numbers {
   static List<int> generateNumbers() {

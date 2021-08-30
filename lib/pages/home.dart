@@ -1,11 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:filtration_task/services/numbers.dart';
 import 'package:filtration_task/services/writeFile.dart';
+import 'package:filtration_task/services/numbers.dart';
+import 'package:flutter/material.dart';
 
 class Generate extends StatefulWidget {
-  const Generate({Key? key}) : super(key: key);
-
   @override
   _GenerateState createState() => _GenerateState();
 }
