@@ -8,18 +8,12 @@ class Generate extends StatefulWidget {
 }
 
 class _GenerateState extends State<Generate> {
+  final _formKey = GlobalKey<FormState>();
   List<int> randomNumbers = [];
   String loadingGenNumbers = '';
   String loadingExtractedNumbers = '';
   String loadingSearch = '';
-  final numberController = TextEditingController();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    numberController.dispose();
-    super.dispose();
-  }
+  late int _number;
 
   @override
   Widget build(BuildContext context) {
@@ -88,26 +82,44 @@ class _GenerateState extends State<Generate> {
                 height: 20,
               ),
               Padding(
-                  padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
-                  child: TextField(
-                      controller: numberController,
-                      decoration:
-                          InputDecoration(labelText: 'Search for a number'))),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () async {
-                  setState(() => loadingSearch = 'Searching...');
-                  int index =
-                      Numbers.search(randomNumbers, numberController.text);
-                  await Future.delayed(Duration(milliseconds: 100));
-                  setState(() => loadingSearch = (index == -2)
-                      ? 'You must enter a number'
-                      : (index == -1)
-                          ? 'Not found..'
-                          : 'Found!!');
-                },
-                child: Text('Search'),
-                style: ElevatedButton.styleFrom(primary: Colors.black),
+                padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                int.tryParse(value) == null)
+                              return "You must enter a number";
+                            return null;
+                          },
+                          decoration:
+                              InputDecoration(labelText: 'Search for a number'),
+                          onChanged: (value) {
+                            try {
+                              _number = int.parse(value);
+                            } catch (e) {}
+                          }),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() => loadingSearch = 'Searching...');
+                            int index = Numbers.search(randomNumbers, _number);
+                            await Future.delayed(Duration(milliseconds: 100));
+                            setState(() => loadingSearch =
+                                (index == -1) ? 'Not found..' : 'Found!!');
+                          } else
+                            return;
+                        },
+                        child: Text('Search'),
+                        style: ElevatedButton.styleFrom(primary: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(
                 height: 10,

@@ -11,15 +11,10 @@ class Numbers {
     return numbers;
   }
 
-  static int search(List<int> numbers, String number) {
-    int numberToSearch = -2;
-    if (int.tryParse(number) == null)
-      return numberToSearch;
-    else {
-      numberToSearch = int.parse(number);
-      numbers.sort();
-      // ignore: await_only_futures
-      return binarySearch(numbers, numberToSearch);
-    }
+  static int search(List<int> numbers, int numberToSearch) {
+    numbers.sort();
+    // ignore: await_only_futures
+    // Returns -1 if not found, else it returns the number's index
+    return binarySearch(numbers, numberToSearch);
   }
 }
