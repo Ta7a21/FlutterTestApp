@@ -1,5 +1,5 @@
-import 'package:filtration_task/services/writeFile.dart';
 import 'package:filtration_task/services/numbers.dart';
+import 'package:filtration_task/services/writeFile.dart';
 import 'package:flutter/material.dart';
 
 class Generate extends StatefulWidget {
@@ -8,17 +8,17 @@ class Generate extends StatefulWidget {
 }
 
 class _GenerateState extends State<Generate> {
-  final _formKey = GlobalKey<FormState>();
-  List<int> randomNumbers = [];
+  var formKey = GlobalKey<FormState>();
+  Numbers randomNumbers = Numbers();
   String loadingGenNumbers = '';
   String loadingExtractedNumbers = '';
   String loadingSearch = '';
-  late int _number;
-  Map user = {};
+  late int numberInput;
+
   @override
   Widget build(BuildContext context) {
-    user =
-        user.isEmpty ? ModalRoute.of(context)!.settings.arguments as Map : user;
+    // Get username from the previous route
+    Map user = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +50,7 @@ class _GenerateState extends State<Generate> {
               ElevatedButton(
                 onPressed: () async {
                   setState(() => loadingGenNumbers = 'Loading...');
-                  randomNumbers = Numbers.generateNumbers();
+                  randomNumbers.generate();
                   await Future.delayed(Duration(milliseconds: 100));
                   setState(() => loadingGenNumbers = '');
                 },
@@ -67,7 +67,7 @@ class _GenerateState extends State<Generate> {
               ElevatedButton(
                 onPressed: () async {
                   setState(() => loadingExtractedNumbers = 'Loading...');
-                  await FileUtils.saveToFile(randomNumbers);
+                  await FileUtils.saveToFile(randomNumbers.list);
                   setState(() => loadingExtractedNumbers = '');
                 },
                 child: Text('Extract Numbers to TXT'),
@@ -83,7 +83,7 @@ class _GenerateState extends State<Generate> {
               Padding(
                 padding: EdgeInsets.fromLTRB(96, 0, 96, 0),
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     children: [
                       TextFormField(
@@ -103,15 +103,15 @@ class _GenerateState extends State<Generate> {
                           ),
                           onChanged: (value) {
                             try {
-                              _number = int.parse(value);
+                              numberInput = int.parse(value);
                             } catch (e) {}
                           }),
                       SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             setState(() => loadingSearch = 'Searching...');
-                            int index = Numbers.search(randomNumbers, _number);
+                            int index = randomNumbers.search(numberInput);
                             await Future.delayed(Duration(milliseconds: 100));
                             setState(() => loadingSearch =
                                 (index == -1) ? 'Not found..' : 'Found!!');

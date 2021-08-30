@@ -1,5 +1,5 @@
 import 'package:filtration_task/services/database_helper.dart';
-import 'package:filtration_task/user.dart';
+import 'package:filtration_task/userModel.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -29,11 +29,11 @@ class _SignInState extends State<SignIn> {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Username'),
-                  onChanged: (value) => user.setUsername(value),
+                  onChanged: (value) => user.username = value,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Password'),
-                  onChanged: (value) => user.setPassword(value),
+                  onChanged: (value) => user.password = value,
                   obscureText: true,
                 ),
                 SizedBox(height: 8),
@@ -59,10 +59,10 @@ class _SignInState extends State<SignIn> {
                   onPressed: () async {
                     incorrectAuth = '';
                     bool granted = await DatabaseHelper.grantAuthorization(
-                        user.getUsername(), user.getPassword());
+                        user.username, user.password);
                     if (granted) {
                       Navigator.pushReplacementNamed(context, '/home',
-                          arguments: {'username': user.getUsername()});
+                          arguments: {'username': user.username});
                     } else {
                       setState(() {
                         incorrectAuth = 'Incorrect Username or Password';

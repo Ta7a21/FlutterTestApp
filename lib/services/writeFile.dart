@@ -1,14 +1,15 @@
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
+
 class FileUtils {
-  static Future<String> get getFilePath async {
+  static Future<String> get __getFilePath async {
     final directory = await getExternalStorageDirectory();
     return directory!.path;
   }
 
-  static Future<File> get getFile async {
-    final path = await getFilePath;
+  static Future<File> get _getFile async {
+    final path = await __getFilePath;
     return File('$path/myfile.txt');
   }
 
@@ -17,7 +18,7 @@ class FileUtils {
     dataRecieved.forEach((element) {
       dataToWrite += element.toString() + ' ';
     });
-    final file = await getFile;
+    final file = await _getFile;
     return file.writeAsString(dataToWrite);
   }
 }

@@ -1,20 +1,21 @@
-import 'package:flutter/foundation.dart';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 class Numbers {
-  static List<int> generateNumbers() {
-    List<int> numbers = [];
+  List<int> list = [];
+
+  void generate() {
     var rng = new Random();
     for (var i = 0; i < 10000; i++) {
-      numbers.add(rng.nextInt(10000));
+      list.add(rng.nextInt(10000));
     }
-    return numbers;
   }
 
-  static int search(List<int> numbers, int numberToSearch) {
-    numbers.sort();
+  int search(int numberToSearch) {
+    list.sort(); // O(n log(n))
     // ignore: await_only_futures
     // Returns -1 if not found, else it returns the number's index
-    return binarySearch(numbers, numberToSearch);
+    return binarySearch(list, numberToSearch); // O(log n)
   }
 }

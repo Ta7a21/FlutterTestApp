@@ -1,18 +1,35 @@
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:crypto/crypto.dart';
-import 'package:path/path.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+
 class DatabaseHelper {
-  static final _databaseName = "database.db";
-  static final _databaseVersion = 1;
-  static final table = 'User';
-  static final columnFName = 'fname';
-  static final columnLName = 'lname';
-  static final columnUsername = 'username';
-  static final columnPassword = 'password';
+  String _databaseName = "database.db";
+  int _databaseVersion = 1;
+  static String _table = 'User';
+  static String _columnFName = 'fname';
+  static String _columnLName = 'lname';
+  static String _columnUsername = 'username';
+  static String _columnPassword = 'password';
+
+  static String getColumnFName() {
+    return _columnFName;
+  }
+
+  static String getColumnLName() {
+    return _columnLName;
+  }
+
+  static String getColumnUsername() {
+    return _columnUsername;
+  }
+
+  static String getColumnPassword() {
+    return _columnPassword;
+  }
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -35,17 +52,17 @@ class DatabaseHelper {
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
     return await db.execute(
-        'CREATE TABLE $table ($columnUsername VARCHAR(20) PRIMARY KEY,$columnFName VARCHAR(20) NOT NULL,$columnLName VARCHAR(20) NOT NULL,$columnPassword TEXT NOT NULL)');
+        'CREATE TABLE $_table ($_columnUsername VARCHAR(20) PRIMARY KEY,$_columnFName VARCHAR(20) NOT NULL,$_columnLName VARCHAR(20) NOT NULL,$_columnPassword TEXT NOT NULL)');
   }
 
-  static Future<int> insert(Map<String, dynamic> row) async {
+  static Future<int> insertHelper(Map<String, dynamic> row) async {
     Database db = await instance.database;
-    return await db.insert(table, row);
+    return await db.insert(_table, row);
   }
 
   static Future<bool> grantAuthorization(
       String username, String password) async {
-    List<Map> resultSet = await checkUsername(username);
+    List<Map> resultSet = await getUsername(username);
     if (resultSet.isNotEmpty) {
       String storedPassword = resultSet.first['password'];
       return comparePasswords(storedPassword, password);
@@ -53,16 +70,13 @@ class DatabaseHelper {
       return false;
   }
 
-  static Future<List<Map>> checkUsername(String username) async {
+  static Future<List<Map>> getUsername(String username) async {
     Database db = await DatabaseHelper.instance.database;
-    List<String> columns = [
-      DatabaseHelper.columnUsername,
-      DatabaseHelper.columnPassword
-    ];
-    String row = '${DatabaseHelper.columnUsername} = ?';
+    List<String> columns = [_columnUsername, _columnPassword];
+    String row = '$_columnUsername = ?';
     List<dynamic> requiredRow = [username];
 
-    List<Map> resultSet = await db.query(DatabaseHelper.table,
+    List<Map> resultSet = await db.query(_table,
         columns: columns, where: row, whereArgs: requiredRow);
     return resultSet;
   }

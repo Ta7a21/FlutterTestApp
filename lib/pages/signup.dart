@@ -1,5 +1,6 @@
 import 'package:filtration_task/services/database_helper.dart';
-import 'package:filtration_task/user.dart';
+import 'package:filtration_task/services/userDB.dart';
+import 'package:filtration_task/userModel.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -40,7 +41,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           return null;
                         },
-                        onChanged: (value) => user.setFName(value),
+                        onChanged: (value) => user.firstname = value,
                         decoration:
                             const InputDecoration(labelText: 'First Name'),
                       ),
@@ -56,7 +57,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           return null;
                         },
-                        onChanged: (value) => user.setLName(value),
+                        onChanged: (value) => user.lastname = value,
                         decoration:
                             const InputDecoration(labelText: 'Last Name'),
                       ),
@@ -75,9 +76,9 @@ class _SignUpState extends State<SignUp> {
                     return null;
                   },
                   onChanged: (value) async {
-                    user.setUsername(value);
+                    user.username = value;
                     List<Map> resultSet =
-                        await DatabaseHelper.checkUsername(value);
+                        await DatabaseHelper.getUsername(value);
 
                     isUsername = resultSet.isEmpty ? false : true;
                   },
@@ -93,14 +94,13 @@ class _SignUpState extends State<SignUp> {
                     }
                     return null;
                   },
-                  onChanged: (value) => user.setPassword(value),
+                  onChanged: (value) => user.password = value,
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value != user.getPassword())
-                      return 'Passwords don\'t match';
+                    if (value != user.password) return 'Passwords don\'t match';
                     return null;
                   },
                   decoration:
@@ -113,10 +113,10 @@ class _SignUpState extends State<SignUp> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      User.addToDatabase(user);
+                      UserDB.add(user);
                       Navigator.pushNamedAndRemoveUntil(
                           context, "/home", (r) => false,
-                          arguments: {'username': user.getUsername()});
+                          arguments: {'username': user.username});
                     } else {
                       return;
                     }
