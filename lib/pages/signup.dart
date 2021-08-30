@@ -115,7 +115,7 @@ class _SignUpState extends State<SignUp> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      DatabaseHelper.addUser(user);
+                      User.addUser(user);
                       Navigator.pushNamedAndRemoveUntil(
                           context, "/home", (r) => false);
                     } else {

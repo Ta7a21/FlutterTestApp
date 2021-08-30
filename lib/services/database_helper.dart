@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:filtration_task/user.dart';
 
 class DatabaseHelper {
   static final _databaseName = "database.db";
@@ -44,31 +43,19 @@ class DatabaseHelper {
         'CREATE TABLE $table ($columnUsername VARCHAR(20) PRIMARY KEY,$columnFName VARCHAR(20) NOT NULL,$columnLName VARCHAR(20) NOT NULL,$columnPassword TEXT NOT NULL)');
   }
 
-  // Helper methods
-
-  // Inserts a row in the database where each key in the Map is a column name
-  // and the value is the column value. The return value is the id of the
-  // inserted row.
   static Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.database;
     return await db.insert(table, row);
   }
 
-  // All of the rows are returned as a list of maps, where each map is
-  // a key-value list of columns.
-  // Future<List<Map<String, dynamic>>> queryAllRows() async {
-  //   Database db = await instance.database;
-  //   return await db.query(table);
-  // }
-
-  static String hashPassword(String password) {
-    var bytes = utf8.encode(password);
-    var hashedPassword = sha1.convert(bytes);
-    return hashedPassword.toString();
-  }
-
-  static bool isPassMatching(String storedPassword, String password) {
-    return hashPassword(password) == storedPassword;
+  static Future<bool> checkAuthorization(
+      String username, String password) async {
+    List<Map> resultSet = await checkUsername(username);
+    if (resultSet.isNotEmpty) {
+      String storedPassword = resultSet.first['password'];
+      return isPassMatching(storedPassword, password);
+    } else
+      return false;
   }
 
   static Future<List<Map>> checkUsername(String username) async {
@@ -85,35 +72,13 @@ class DatabaseHelper {
     return resultSet;
   }
 
-  static Future<bool> checkAuthorization(
-      String username, String password) async {
-    List<Map> resultSet = await checkUsername(username);
-    if (resultSet.isNotEmpty) {
-      String storedPassword = resultSet.first['password'];
-      return isPassMatching(storedPassword, password);
-    } else
-      return false;
+  static bool isPassMatching(String storedPassword, String password) {
+    return hashPassword(password) == storedPassword;
   }
 
-  static Future<void> addUser(User user) async {
-    user.password = hashPassword(user.password);
-    // row to insert
-    Map<String, dynamic> row = {
-      DatabaseHelper.columnFName: user.firstname,
-      DatabaseHelper.columnLName: user.lastname,
-      DatabaseHelper.columnUsername: user.username,
-      DatabaseHelper.columnPassword: user.password,
-    };
-    await insert(row);
+  static String hashPassword(String password) {
+    var bytes = utf8.encode(password);
+    var hashedPassword = sha1.convert(bytes);
+    return hashedPassword.toString();
   }
-
-  // All of the methods (insert, query, update, delete) can also be done using
-  // raw SQL commands. This method uses a raw query to give the row count.
-  //Future<int> queryRowCount() async {
-  //Database db = await instance.database;
-  //return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
-  //}
-
-  // We are assuming here that the id column in the map is set. The other
-  // column values will be used to update the row.
 }
