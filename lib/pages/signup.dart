@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:filtration_task/services/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'package:filtration_task/user.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -10,50 +8,11 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  User user = User();
   final dbHelper = DatabaseHelper.instance;
 
-  String _fnameController = '';
-
-  String _lnameController = '';
-
-  String _usernameController = '';
-
-  String _passwordController = '';
-
-  bool flagUsername = false;
-
+  bool isUsername = false;
   final _formKey = GlobalKey<FormState>();
-
-  // void dispose() {
-  //   _fnameController.dispose();
-  //   _lnameController.dispose();
-  //   _usernameController.dispose();
-  //   _passwordController.dispose();
-  //   _confirmPasswordController.dispose();
-  // }
-
-  void _query() async {
-    final allRows = await dbHelper.queryAllRows();
-    print('query all rows:');
-    allRows.forEach(print);
-  }
-
-  Future<bool> _insert(var password) async {
-    // row to insert
-    Map<String, dynamic> row = {
-      DatabaseHelper.columnFName: _fnameController,
-      DatabaseHelper.columnLName: _lnameController,
-      DatabaseHelper.columnUsername: _usernameController,
-      DatabaseHelper.columnPassword: password.toString(),
-    };
-    try {
-      final id = await dbHelper.insert(row);
-      return true;
-    } catch (e) {
-      return false;
-    }
-    // print('inserted row id: $id');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +39,11 @@ class _SignUpState extends State<SignUp> {
                       child: TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'required';
+                            return 'Required';
                           }
                           return null;
                         },
-                        // controller: _fnameController,
-                        onChanged: (value) => _fnameController = value,
+                        onChanged: (value) => user.firstname = value,
                         decoration:
                             const InputDecoration(labelText: 'First Name'),
                       ),
@@ -97,12 +55,11 @@ class _SignUpState extends State<SignUp> {
                       child: TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'required';
+                            return 'Required';
                           }
                           return null;
                         },
-                        // controller: _lnameController,
-                        onChanged: (value) => _lnameController = value,
+                        onChanged: (value) => user.lastname = value,
                         decoration:
                             const InputDecoration(labelText: 'Last Name'),
                       ),
@@ -112,50 +69,42 @@ class _SignUpState extends State<SignUp> {
                 TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'required';
+                      return 'Required';
                     }
                     if (value.trim().length < 4) {
-                      return 'Password must be at least 4 characters in length';
+                      return 'Username must be at least 4 characters in length';
                     }
-                    if (flagUsername) return 'username already taken';
+                    if (isUsername) return 'Username already taken';
                     return null;
                   },
-                  // controller: _usernameController,
                   onChanged: (value) async {
-                    Database db = await DatabaseHelper.instance.database;
-                    _usernameController = value;
-                    List<String> column = [DatabaseHelper.columnUsername];
-                    List<dynamic> reqRow = [value];
-                    List<Map> result = await db.query(DatabaseHelper.table,
-                        columns: column,
-                        where: '${DatabaseHelper.columnUsername} = ?',
-                        whereArgs: reqRow);
-                    flagUsername = result.isEmpty ? false : true;
+                    user.username = value;
+                    List<Map> resultSet =
+                        await DatabaseHelper.checkUsername(value);
+
+                    isUsername = resultSet.isEmpty ? false : true;
                   },
                   decoration: const InputDecoration(labelText: 'Username'),
                 ),
                 TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'required';
+                      return 'Required';
                     }
                     if (value.trim().length < 8) {
                       return 'Password must be at least 8 characters in length';
                     }
                     return null;
                   },
-                  // controller: _passwordController,
-                  onChanged: (value) => _passwordController = value,
+                  onChanged: (value) => user.password = value,
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value != _passwordController)
-                      return 'passwords don\'t match';
+                    if (value != user.password) return 'Passwords don\'t match';
                     return null;
                   },
-                  // controller: _confirmPasswordController,
                   decoration:
                       const InputDecoration(labelText: 'Confirm Password'),
                   obscureText: true,
@@ -166,9 +115,7 @@ class _SignUpState extends State<SignUp> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      var bytes = utf8.encode(_passwordController);
-                      var hashedPassword = sha1.convert(bytes);
-                      _insert(hashedPassword);
+                      DatabaseHelper.addUser(user);
                       Navigator.pushNamedAndRemoveUntil(
                           context, "/home", (r) => false);
                     } else {

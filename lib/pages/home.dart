@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:filtration_task/services/numbers.dart';
 import 'package:filtration_task/services/writeFile.dart';
 
 class Generate extends StatefulWidget {
@@ -13,34 +13,14 @@ class Generate extends StatefulWidget {
 class _GenerateState extends State<Generate> {
   List<int> randomNumbers = [];
   String loadingGenNumbers = '';
-  String loadingExtNumbers = '';
+  String loadingExtractedNumbers = '';
   String loadingSearch = '';
-  final myController = TextEditingController();
-
-  void generateNumbers() {
-    var rng = new Random();
-    randomNumbers.clear();
-    for (var i = 0; i < 10000; i++) {
-      randomNumbers.add(rng.nextInt(10000));
-    }
-  }
-
-  int search(String number) {
-    int numberToSearch = -2;
-    if (int.tryParse(number) == null)
-      return numberToSearch;
-    else {
-      numberToSearch = int.parse(number);
-      randomNumbers.sort();
-      // ignore: await_only_futures
-      return binarySearch(randomNumbers, numberToSearch);
-    }
-  }
+  final numberController = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    myController.dispose();
+    numberController.dispose();
     super.dispose();
   }
 
@@ -75,14 +55,10 @@ class _GenerateState extends State<Generate> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  setState(() {
-                    loadingGenNumbers = 'Loading...';
-                  });
-                  generateNumbers();
+                  setState(() => loadingGenNumbers = 'Loading...');
+                  randomNumbers = Numbers.generateNumbers();
                   await Future.delayed(Duration(milliseconds: 100));
-                  setState(() {
-                    loadingGenNumbers = '';
-                  });
+                  setState(() => loadingGenNumbers = '');
                 },
                 child: Text('Generate Numbers'),
                 style: ElevatedButton.styleFrom(primary: Colors.black),
@@ -97,13 +73,9 @@ class _GenerateState extends State<Generate> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  setState(() {
-                    loadingExtNumbers = 'Loading...';
-                  });
+                  setState(() => loadingExtractedNumbers = 'Loading...');
                   await FileUtils.saveToFile(randomNumbers);
-                  setState(() {
-                    loadingExtNumbers = '';
-                  });
+                  setState(() => loadingExtractedNumbers = '');
                 },
                 child: Text('Extract Numbers to TXT'),
                 style: ElevatedButton.styleFrom(primary: Colors.black),
@@ -112,7 +84,7 @@ class _GenerateState extends State<Generate> {
                 height: 10,
               ),
               Text(
-                loadingExtNumbers,
+                loadingExtractedNumbers,
                 style: TextStyle(),
               ),
               SizedBox(
@@ -121,24 +93,21 @@ class _GenerateState extends State<Generate> {
               Padding(
                   padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
                   child: TextField(
-                      controller: myController,
+                      controller: numberController,
                       decoration:
                           InputDecoration(labelText: 'Search for a number'))),
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () async {
-                  setState(() {
-                    loadingSearch = 'Searching...';
-                  });
-                  int index = search(myController.text);
+                  setState(() => loadingSearch = 'Searching...');
+                  int index =
+                      Numbers.search(randomNumbers, numberController.text);
                   await Future.delayed(Duration(milliseconds: 100));
-                  setState(() {
-                    loadingSearch = (index == -2)
-                        ? 'You must enter a number'
-                        : (index == -1)
-                            ? 'Not found..'
-                            : 'Found!!';
-                  });
+                  setState(() => loadingSearch = (index == -2)
+                      ? 'You must enter a number'
+                      : (index == -1)
+                          ? 'Not found..'
+                          : 'Found!!');
                 },
                 child: Text('Search'),
                 style: ElevatedButton.styleFrom(primary: Colors.black),

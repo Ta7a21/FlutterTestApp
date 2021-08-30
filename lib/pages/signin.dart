@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:filtration_task/services/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
+import 'package:filtration_task/user.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -10,37 +8,9 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final _usernameController = TextEditingController();
-
-  final _passwordController = TextEditingController();
-
+  User user = User();
   final dbHelper = DatabaseHelper.instance;
   String incorrectAuth = '';
-
-  Future<int?> _query() async {
-    Database db = await DatabaseHelper.instance.database;
-    List<String> columns = [
-      DatabaseHelper.columnUsername,
-      DatabaseHelper.columnPassword
-    ];
-    String row = '${DatabaseHelper.columnUsername} = ?';
-    List<dynamic> reqRow = [_usernameController.text];
-
-    List<Map> result = await db.query(DatabaseHelper.table,
-        columns: columns, where: row, whereArgs: reqRow);
-    if (result.isNotEmpty) {
-      var bytes = utf8.encode(_passwordController.text);
-      var hashedPassword = sha1.convert(bytes);
-      if (hashedPassword.toString() == result.first['password']) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-    //final allRows = await dbHelper.database.query();
-    // print('query all rows:');
-    // allRows.forEach(print);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +32,11 @@ class _SignInState extends State<SignIn> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Username'),
-                  controller: _usernameController,
+                  onChanged: (value) => user.username = value,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Password'),
-                  controller: _passwordController,
+                  onChanged: (value) => user.password = value,
                   obscureText: true,
                 ),
                 SizedBox(
@@ -92,8 +62,9 @@ class _SignInState extends State<SignIn> {
                 ElevatedButton(
                   onPressed: () async {
                     incorrectAuth = '';
-                    int? flag = await _query();
-                    if (flag == 1) {
+                    bool granted = await DatabaseHelper.checkAuthorization(
+                        user.username, user.password);
+                    if (granted) {
                       Navigator.pushReplacementNamed(context, '/home');
                     } else {
                       setState(() {
