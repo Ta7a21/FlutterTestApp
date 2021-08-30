@@ -62,7 +62,7 @@ class _SignInState extends State<SignIn> {
                 ElevatedButton(
                   onPressed: () async {
                     incorrectAuth = '';
-                    bool granted = await DatabaseHelper.checkAuthorization(
+                    bool granted = await DatabaseHelper.grantAuthorization(
                         user.username, user.password);
                     if (granted) {
                       Navigator.pushReplacementNamed(context, '/home');

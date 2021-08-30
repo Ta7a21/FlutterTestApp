@@ -6,7 +6,7 @@ class User {
   late String username;
   late String password;
 
-  static Future<void> addUser(User user) async {
+  static Future<void> addToDatabase(User user) async {
     user.password = DatabaseHelper.hashPassword(user.password);
 
     Map<String, dynamic> row = {

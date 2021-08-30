@@ -17,7 +17,6 @@ class DatabaseHelper {
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
-
   late Database _database;
   Future<Database> get database async {
     // instantiate the db the first time it is accessed
@@ -44,12 +43,12 @@ class DatabaseHelper {
     return await db.insert(table, row);
   }
 
-  static Future<bool> checkAuthorization(
+  static Future<bool> grantAuthorization(
       String username, String password) async {
     List<Map> resultSet = await checkUsername(username);
     if (resultSet.isNotEmpty) {
       String storedPassword = resultSet.first['password'];
-      return isPassMatching(storedPassword, password);
+      return comparePasswords(storedPassword, password);
     } else
       return false;
   }
@@ -68,7 +67,7 @@ class DatabaseHelper {
     return resultSet;
   }
 
-  static bool isPassMatching(String storedPassword, String password) {
+  static bool comparePasswords(String storedPassword, String password) {
     return hashPassword(password) == storedPassword;
   }
 
