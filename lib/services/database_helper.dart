@@ -14,15 +14,13 @@ class DatabaseHelper {
   static final columnUsername = 'username';
   static final columnPassword = 'password';
 
-  // make this a singleton class
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
-  // only have a single app-wide reference to the database
+
   late Database _database;
   Future<Database> get database async {
-    //if (_database != null) return _database;
-    // lazily instantiate the db the first time it is accessed
+    // instantiate the db the first time it is accessed
     _database = await _initDatabase();
     return _database;
   }
@@ -63,10 +61,10 @@ class DatabaseHelper {
       DatabaseHelper.columnPassword
     ];
     String row = '${DatabaseHelper.columnUsername} = ?';
-    List<dynamic> reqiredRow = [username];
+    List<dynamic> requiredRow = [username];
 
     List<Map> resultSet = await db.query(DatabaseHelper.table,
-        columns: columns, where: row, whereArgs: reqiredRow);
+        columns: columns, where: row, whereArgs: requiredRow);
     return resultSet;
   }
 
