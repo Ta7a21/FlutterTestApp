@@ -27,12 +27,9 @@ class _SignUpState extends State<SignUp> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(100, 140, 100, 0),
+            padding: EdgeInsets.fromLTRB(96, 136, 96, 0),
             child: Column(
               children: [
-                SizedBox(
-                  height: 30,
-                ),
                 Row(
                   children: [
                     Flexible(
@@ -49,7 +46,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 24,
                     ),
                     Flexible(
                       child: TextFormField(
@@ -102,7 +99,8 @@ class _SignUpState extends State<SignUp> {
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value != user.getPassword()) return 'Passwords don\'t match';
+                    if (value != user.getPassword())
+                      return 'Passwords don\'t match';
                     return null;
                   },
                   decoration:
@@ -110,7 +108,7 @@ class _SignUpState extends State<SignUp> {
                   obscureText: true,
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 16,
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -123,8 +121,11 @@ class _SignUpState extends State<SignUp> {
                       return;
                     }
                   },
-                  child: Text('Submit'),
-                  style: ElevatedButton.styleFrom(primary: Colors.black),
+                  child: Text('Sign up'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50))),
                 ),
               ],
             ),

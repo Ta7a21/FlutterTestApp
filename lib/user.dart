@@ -18,35 +18,35 @@ class User {
     await DatabaseHelper.insert(row);
   }
 
-  void setFName (String firstname){
+  void setFName(String firstname) {
     this._firstname = firstname;
   }
 
-  void setLName (String lastname){
+  void setLName(String lastname) {
     this._lastname = lastname;
   }
-  void setUsername (String username){
+
+  void setUsername(String username) {
     this._username = username;
   }
 
-  void setPassword (String password){
+  void setPassword(String password) {
     this._password = password;
   }
 
-  String getFName (){
+  String getFName() {
     return _firstname;
   }
 
-  String getLName (){
+  String getLName() {
     return _lastname;
   }
 
-  String getUsername (){
+  String getUsername() {
     return _username;
   }
 
-  String getPassword (){
+  String getPassword() {
     return _password;
   }
-
 }

@@ -24,12 +24,9 @@ class _SignInState extends State<SignIn> {
       resizeToAvoidBottomInset: false,
       body: Form(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(100, 140, 100, 0),
+            padding: EdgeInsets.fromLTRB(96, 136, 96, 0),
             child: Column(
               children: [
-                SizedBox(
-                  height: 30,
-                ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Username'),
                   onChanged: (value) => user.setUsername(value),
@@ -39,26 +36,25 @@ class _SignInState extends State<SignIn> {
                   onChanged: (value) => user.setPassword(value),
                   obscureText: true,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Don\'t have an account?'),
+                    Text(
+                      'Don\'t have an account?',
+                      style: TextStyle(fontSize: 14),
+                    ),
                     TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },
                         child: Text(
                           'Sign-up',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black, fontSize: 14),
                         ))
                   ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () async {
                     incorrectAuth = '';
@@ -73,12 +69,13 @@ class _SignInState extends State<SignIn> {
                       });
                     }
                   },
-                  child: Text('Submit'),
-                  style: ElevatedButton.styleFrom(primary: Colors.black),
+                  child: Text('Sign in'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50))),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 8),
                 Text(
                   incorrectAuth,
                   style: TextStyle(color: Colors.red[900]),

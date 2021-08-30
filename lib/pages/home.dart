@@ -32,7 +32,7 @@ class _GenerateState extends State<Generate> {
                 Navigator.pushReplacementNamed(context, '/');
               },
               child: Padding(
-                padding: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 8),
                 child: Text(
                   'Log out',
                   style: TextStyle(fontSize: 16),
@@ -55,16 +55,15 @@ class _GenerateState extends State<Generate> {
                   setState(() => loadingGenNumbers = '');
                 },
                 child: Text('Generate Numbers'),
-                style: ElevatedButton.styleFrom(primary: Colors.black),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.black,
+                    fixedSize: Size(192, 40),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50))),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                loadingGenNumbers,
-                style: TextStyle(),
-              ),
-              SizedBox(height: 20),
+              SizedBox(height: 8),
+              Text(loadingGenNumbers),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   setState(() => loadingExtractedNumbers = 'Loading...');
@@ -72,20 +71,17 @@ class _GenerateState extends State<Generate> {
                   setState(() => loadingExtractedNumbers = '');
                 },
                 child: Text('Extract Numbers to TXT'),
-                style: ElevatedButton.styleFrom(primary: Colors.black),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.black,
+                    fixedSize: Size(192, 40),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50))),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                loadingExtractedNumbers,
-                style: TextStyle(),
-              ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 8),
+              Text(loadingExtractedNumbers),
+              SizedBox(height: 16),
               Padding(
-                padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                padding: EdgeInsets.fromLTRB(96, 0, 96, 0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -98,14 +94,18 @@ class _GenerateState extends State<Generate> {
                               return "You must enter an integer";
                             return null;
                           },
-                          decoration:
-                              InputDecoration(labelText: 'Search for a number'),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: 'Search for a number',
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 32),
+                          ),
                           onChanged: (value) {
                             try {
                               _number = int.parse(value);
                             } catch (e) {}
                           }),
-                      SizedBox(height: 10),
+                      SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -118,18 +118,19 @@ class _GenerateState extends State<Generate> {
                             return;
                         },
                         child: Text('Search'),
-                        style: ElevatedButton.styleFrom(primary: Colors.black),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50))),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 8),
               Text(
                 loadingSearch,
-                style: TextStyle(),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
