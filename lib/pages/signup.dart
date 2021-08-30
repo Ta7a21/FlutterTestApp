@@ -43,7 +43,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           return null;
                         },
-                        onChanged: (value) => user.firstname = value,
+                        onChanged: (value) => user.setFName(value),
                         decoration:
                             const InputDecoration(labelText: 'First Name'),
                       ),
@@ -59,7 +59,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           return null;
                         },
-                        onChanged: (value) => user.lastname = value,
+                        onChanged: (value) => user.setLName(value),
                         decoration:
                             const InputDecoration(labelText: 'Last Name'),
                       ),
@@ -78,7 +78,7 @@ class _SignUpState extends State<SignUp> {
                     return null;
                   },
                   onChanged: (value) async {
-                    user.username = value;
+                    user.setUsername(value);
                     List<Map> resultSet =
                         await DatabaseHelper.checkUsername(value);
 
@@ -96,13 +96,13 @@ class _SignUpState extends State<SignUp> {
                     }
                     return null;
                   },
-                  onChanged: (value) => user.password = value,
+                  onChanged: (value) => user.setPassword(value),
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value != user.password) return 'Passwords don\'t match';
+                    if (value != user.getPassword()) return 'Passwords don\'t match';
                     return null;
                   },
                   decoration:
@@ -118,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                       User.addToDatabase(user);
                       Navigator.pushNamedAndRemoveUntil(
                           context, "/home", (r) => false,
-                          arguments: {'username': user.username});
+                          arguments: {'username': user.getUsername()});
                     } else {
                       return;
                     }

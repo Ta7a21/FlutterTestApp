@@ -32,11 +32,11 @@ class _SignInState extends State<SignIn> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Username'),
-                  onChanged: (value) => user.username = value,
+                  onChanged: (value) => user.setUsername(value),
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Password'),
-                  onChanged: (value) => user.password = value,
+                  onChanged: (value) => user.setPassword(value),
                   obscureText: true,
                 ),
                 SizedBox(
@@ -63,10 +63,10 @@ class _SignInState extends State<SignIn> {
                   onPressed: () async {
                     incorrectAuth = '';
                     bool granted = await DatabaseHelper.grantAuthorization(
-                        user.username, user.password);
+                        user.getUsername(), user.getPassword());
                     if (granted) {
                       Navigator.pushReplacementNamed(context, '/home',
-                          arguments: {'username': user.username});
+                          arguments: {'username': user.getUsername()});
                     } else {
                       setState(() {
                         incorrectAuth = 'Incorrect Username or Password';
