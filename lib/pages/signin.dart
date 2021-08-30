@@ -65,7 +65,8 @@ class _SignInState extends State<SignIn> {
                     bool granted = await DatabaseHelper.grantAuthorization(
                         user.username, user.password);
                     if (granted) {
-                      Navigator.pushReplacementNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/home',
+                          arguments: {'username': user.username});
                     } else {
                       setState(() {
                         incorrectAuth = 'Incorrect Username or Password';

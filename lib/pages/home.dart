@@ -14,12 +14,15 @@ class _GenerateState extends State<Generate> {
   String loadingExtractedNumbers = '';
   String loadingSearch = '';
   late int _number;
-
+  Map user = {};
   @override
   Widget build(BuildContext context) {
+    user =
+        user.isEmpty ? ModalRoute.of(context)!.settings.arguments as Map : user;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome'),
+        title: Text('Welcome ${user['username']}'),
         backgroundColor: Colors.black,
         centerTitle: true,
         actions: [

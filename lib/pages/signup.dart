@@ -117,7 +117,8 @@ class _SignUpState extends State<SignUp> {
                     if (_formKey.currentState!.validate()) {
                       User.addToDatabase(user);
                       Navigator.pushNamedAndRemoveUntil(
-                          context, "/home", (r) => false);
+                          context, "/home", (r) => false,
+                          arguments: {'username': user.username});
                     } else {
                       return;
                     }
