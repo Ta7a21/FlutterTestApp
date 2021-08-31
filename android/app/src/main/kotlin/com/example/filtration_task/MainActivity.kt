@@ -1,4 +1,4 @@
-package com.example.filtration_task
+package com.example.authentication_app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,5 @@
-import 'package:filtration_task/services/database_helper.dart';
-import 'package:filtration_task/userModel.dart';
+import 'package:authentication_app/services/database_helper.dart';
+import 'package:authentication_app/userModel.dart';
 
 class UserDB extends User {
   static Future<void> add(User user) async {

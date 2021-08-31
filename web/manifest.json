@@ -1,6 +1,6 @@
 {
-    "name": "filtration_task",
-    "short_name": "filtration_task",
+    "name": "authentication_app",
+    "short_name": "authentication_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

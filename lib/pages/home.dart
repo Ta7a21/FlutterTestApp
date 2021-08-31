@@ -1,5 +1,5 @@
-import 'package:filtration_task/services/numbers.dart';
-import 'package:filtration_task/services/writeFile.dart';
+import 'package:authentication_app/services/numbers.dart';
+import 'package:authentication_app/services/writeFile.dart';
 import 'package:flutter/material.dart';
 
 class Generate extends StatefulWidget {
@@ -49,10 +49,10 @@ class _GenerateState extends State<Generate> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  setState(() => loadingGenNumbers = 'Loading...');
+                  setState(() => loadingGenNumbers = '');
                   randomNumbers.generate();
                   await Future.delayed(Duration(milliseconds: 100));
-                  setState(() => loadingGenNumbers = '');
+                  setState(() => loadingGenNumbers = 'Generated Successfully!');
                 },
                 child: Text('Generate Numbers'),
                 style: ElevatedButton.styleFrom(
@@ -66,9 +66,10 @@ class _GenerateState extends State<Generate> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  setState(() => loadingExtractedNumbers = 'Loading...');
-                  await FileUtils.saveToFile(randomNumbers.list);
                   setState(() => loadingExtractedNumbers = '');
+                  await FileUtils.saveToFile(randomNumbers.list);
+                  loadingExtractedNumbers = await FileUtils.getFilePath;
+                  setState(() {});
                 },
                 child: Text('Extract Numbers to TXT'),
                 style: ElevatedButton.styleFrom(
@@ -78,7 +79,7 @@ class _GenerateState extends State<Generate> {
                         borderRadius: BorderRadius.circular(50))),
               ),
               SizedBox(height: 8),
-              Text(loadingExtractedNumbers),
+              Text(loadingExtractedNumbers, textAlign: TextAlign.center),
               SizedBox(height: 16),
               Padding(
                 padding: EdgeInsets.fromLTRB(96, 0, 96, 0),

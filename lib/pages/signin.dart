@@ -1,5 +1,5 @@
-import 'package:filtration_task/services/database_helper.dart';
-import 'package:filtration_task/userModel.dart';
+import 'package:authentication_app/services/database_helper.dart';
+import 'package:authentication_app/userModel.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
