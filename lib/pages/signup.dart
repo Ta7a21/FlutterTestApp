@@ -70,7 +70,7 @@ class _SignUpState extends State<SignUp> {
                       return 'Required';
                     }
                     if (value.trim().length < 4) {
-                      return 'Username must be at least 4 characters in length';
+                      return 'Enter at least 4 characters';
                     }
                     if (isUsername) return 'Username already taken';
                     return null;
@@ -90,7 +90,7 @@ class _SignUpState extends State<SignUp> {
                       return 'Required';
                     }
                     if (value.trim().length < 8) {
-                      return 'Password must be at least 8 characters in length';
+                      return 'Enter at least 8 characters';
                     }
                     return null;
                   },

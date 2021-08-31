@@ -65,7 +65,7 @@ class _SignInState extends State<SignIn> {
                           arguments: {'username': user.username});
                     } else {
                       setState(() {
-                        incorrectAuth = 'Incorrect Username or Password';
+                        incorrectAuth = 'Incorrect username or password';
                       });
                     }
                   },
@@ -78,7 +78,7 @@ class _SignInState extends State<SignIn> {
                 SizedBox(height: 8),
                 Text(
                   incorrectAuth,
-                  style: TextStyle(color: Colors.red[900]),
+                  style: TextStyle(color: Colors.red[900], fontSize: 12),
                 ),
               ],
             )),

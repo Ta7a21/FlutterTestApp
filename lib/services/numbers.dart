@@ -6,9 +6,9 @@ class Numbers {
   List<int> list = [];
 
   void generate() {
-    var rng = new Random();
+    var range = new Random();
     for (var i = 0; i < 10000; i++) {
-      list.add(rng.nextInt(10000));
+      list.add(range.nextInt(10000));
     }
   }
 

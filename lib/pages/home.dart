@@ -91,7 +91,7 @@ class _GenerateState extends State<Generate> {
                             if (value == null ||
                                 value.isEmpty ||
                                 int.tryParse(value) == null)
-                              return "You must enter an integer";
+                              return "Please enter an integer..";
                             return null;
                           },
                           textAlign: TextAlign.center,
